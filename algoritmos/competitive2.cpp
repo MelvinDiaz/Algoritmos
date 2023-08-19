@@ -64,7 +64,7 @@ int main()
 
     int m, n, l = 0;
     int cont = 0;
-    int finalResult[100];
+    int finalResult[50];
     bool iterator = true;
 
     while (iterator)
@@ -206,7 +206,6 @@ int main()
 
     for (int i = 0; i < (l - 1); i++)
     {
-
         cout << finalResult[i] << endl;
     }
 
