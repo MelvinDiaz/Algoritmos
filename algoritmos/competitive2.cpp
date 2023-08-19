@@ -64,7 +64,7 @@ int main()
 
     int m, n, l = 0;
     int cont = 0;
-    int finalResult[50];
+    int finalResult[100];
     bool iterator = true;
 
     while (iterator)
@@ -76,6 +76,7 @@ int main()
         {
             iterator = false;
         }
+        
 
         int aliceCards[n];
         int bettyCards[m];
@@ -119,7 +120,7 @@ int main()
 
         quickSort(aliceCards, 0, n - 1);
         quickSort(bettyCards, 0, m - 1);
-        
+
         int aux = 0;
         if (n > m)
         {
@@ -198,15 +199,13 @@ int main()
                 }
             }
         }
-
-        finalResult[l] = cont;
-        cont = 0;
-        l++;
-    }
-
-    for (int i = 0; i < (l - 1); i++)
-    {
-        cout << finalResult[i] << endl;
+        if (m != 0 && n != 0)
+        {
+            finalResult[l] = cont;
+            printf("%d\n", finalResult[l]);
+            cont = 0;
+            l++;
+        }
     }
 
     return 0;
