@@ -1,34 +1,33 @@
-#include<stdio.h>
-#define MAX 100099
-int main()
-{
-    int a,b;
-    while(scanf("%d %d",&a,&b)==2 && !(a==0 &&b==0))
-    {
-         int i,j,temp,ans1,ans2,card[MAX]= {},card2[MAX]= {};
-        ans1=ans2=0;
-        for(i=0;i<a;i++)
-           {
-                scanf("%d",&temp);
-                card[temp]=temp;
-           }
-           for(i=0;i<b;i++)
-           {
-                scanf("%d",&temp);
-                card2[temp]=temp;
-           }
-           for(i=0;i<=100000;i++)
-            {
-                if(card[i])
-                    if(card[i]!=card2[card[i]])
-                        ans1++;
-               if(card2[i])
-                    if(card2[i]!=card[card2[i]])
-                        ans2++;
+#include <bits/stdc++.h>
+using namespace std;
+int main () {
+    int A, B, c;
+    while (scanf("%d %d", &A, &B), (A != 0 || B != 0)) {
+        unordered_set<int> a, b;
+        int count = 0;
+        while (A--) {
+            scanf("%d", &c);
+            a.insert(c);
+        }
+        while (B--) {
+            scanf("%d", &c);
+            b.insert(c);
+        }
+
+        if (a.size() < b.size()) {
+            for (auto i : a) {
+                if (auto search = b.find(i); search == b.end()) {
+                    count++;
+                }
             }
-           if(ans1>ans2)
-            ans1=ans2;
-           printf("%d\n",ans1);
+        } else {
+            for (auto el : b) {
+                if (auto search = a.find(el); search == a.end()) {
+                    count++;
+                }
+            }
+        }
+        printf("%d\n" , count);
     }
     return 0;
 }
