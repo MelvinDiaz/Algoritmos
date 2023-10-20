@@ -10,5 +10,8 @@ int main() {
     bst.insert(4);
 
     bst.printInorder();
+    bst.deleteNode(3);
+    cout << endl;
+    bst.printInorder();
     return 0;
 }
