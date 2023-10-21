@@ -14,6 +14,9 @@ int main()
     cout << "Inorder traversal: ";
     avl.printInorder();
     cout << "\n";
+    avl.deleteNode(4);
+    cout << "Inorder traversal with deleted data: ";
+    avl.printInorder();
 
     return 0;
 }

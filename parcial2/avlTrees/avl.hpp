@@ -31,6 +31,42 @@ private:
             return node->height;
         }
     }
+    // This section is the same as bst
+    void search(int data, Node *&node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        else if (data > node->data)
+        {
+            // Will go right, then assign the parent as the current node.
+            search(data, node->right);
+            node->right->parent = node;
+        }
+        else if (data < node->data)
+        {
+            // Will go left, then assign the parent as the current node.
+            search(data, node->left);
+            node->left->parent = node;
+        }
+    }
+
+    // Printing inorder.
+    // Goes to left, prints, goes to right. Then, goes up and prints.
+    void printInorder(Node *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        else
+        {
+            printInorder(node->left);
+            cout << node->data << " ";
+            printInorder(node->right);
+        }
+    }
 
     Node *leftRotation(Node *&node)
     {
@@ -120,40 +156,96 @@ private:
         }
     }
 
-    // This section is the same as bst
-    void search(int data, Node *&node)
+    Node *findSuccessor(Node *&node)
     {
+
+        Node *successor = node->right;
+        while (successor->left != nullptr)
+        {
+            successor = successor->left;
+        }
+        return successor;
+    }
+
+    void deleteNode(Node *&node, int data)
+    {
+        // The first part is the same as bst
         if (node == nullptr)
         {
             return;
         }
+        
         else if (data > node->data)
         {
-            // Will go right, then assign the parent as the current node.
-            search(data, node->right);
-            node->right->parent = node;
+            deleteNode(node->right, data);
         }
         else if (data < node->data)
         {
-            // Will go left, then assign the parent as the current node.
-            search(data, node->left);
-            node->left->parent = node;
-        }
-    }
-
-    // Printing inorder.
-    // Goes to left, prints, goes to right. Then, goes up and prints.
-    void printInorder(Node *node)
-    {
-        if (node == nullptr)
-        {
-            return;
+            deleteNode(node->left, data);
         }
         else
         {
-            printInorder(node->left);
-            cout << node->data << " ";
-            printInorder(node->right);
+            // Check if the node has no children. Easy case
+            if (node->left == nullptr && node->right == nullptr)
+            {
+                delete node;
+                node = nullptr;
+            }
+            else if (node->left == nullptr)
+            {
+                // Pass the node to be deleted to the right with swap. Then delete it.
+                node->right->parent = node->parent;
+                Node *temp = node;
+                node = node->right;
+                delete temp;
+            }
+            else if (node->right == nullptr)
+            {
+                node->left->parent = node->parent;
+                Node *temp = node;
+                node = node->left;
+                delete temp;
+            }
+            else
+            {
+                // Find the successor of the node to be deleted
+                Node *successor = findSuccessor(node);
+                // We assign the value of the successor to the node to be deleted.
+                node->data = successor->data;
+                // We send the successor.data to be deleted, as we changed the node.data to be the successor.data.
+                // We also send node.right as we know that the successor will be in the right subtree of node.
+                deleteNode(node->right, successor->data);
+            }
+        }
+
+        node->height = 1 + max(height(node->left), height(node->right));
+
+        int balance = height(node->left) - height(node->right);
+
+        // Left Left Case
+        if (balance > 1 && data < node->left->data)
+        {
+            node = rightRotation(node);
+        }
+
+        // Right Right Case
+        if (balance < -1 && data > node->right->data)
+        {
+            node = leftRotation(node);
+        }
+
+        // Left Right Case
+        if (balance > 1 && data > node->left->data)
+        {
+            node->left = leftRotation(node->left);
+            node = rightRotation(node);
+        }
+
+        // Right Left Case
+        if (balance < -1 && data < node->right->data )
+        {
+            node->right = rightRotation(node->right);
+            node = leftRotation(node);
         }
     }
 
@@ -176,5 +268,10 @@ public:
     void insert(int data)
     {
         insert(root, data);
+    }
+
+    void deleteNode(int data)
+    {
+        deleteNode(root, data);
     }
 };
