@@ -15,12 +15,6 @@ private:
     };
     Node *root;
 
-    void swap(Node *&a, Node *&b)
-    {
-        Node *temp = a;
-        a = b;
-        b = temp;
-    }
 
     // Insert, recieves at first the node, then will go down the tree
     void insert(int data, Node *&node)
@@ -82,7 +76,6 @@ private:
             {
                 delete node;
                 node = nullptr;
-                
             }
             else if (node->left == nullptr)
             {
@@ -91,7 +84,6 @@ private:
                 Node *temp = node;
                 node = node->right;
                 delete temp;
-                
             }
             else if (node->right == nullptr)
             {
@@ -99,7 +91,6 @@ private:
                 Node *temp = node;
                 node = node->left;
                 delete temp;
-                
             }
             else
             {
@@ -107,7 +98,7 @@ private:
                 Node *successor = findSuccessor(node);
                 // We assign the value of the successor to the node to be deleted.
                 node->data = successor->data;
-                // We send the successor.data to be deleted, as we changed the node.data to be the successor.data. 
+                // We send the successor.data to be deleted, as we changed the node.data to be the successor.data.
                 // We also send node.right as we know that the successor will be in the right subtree of node.
                 deleteNode(successor->data, node->right);
             }
@@ -116,13 +107,26 @@ private:
 
     Node *findSuccessor(Node *&node)
     {
-        
+
         Node *successor = node->right;
         while (successor->left != nullptr)
         {
             successor = successor->left;
         }
         return successor;
+    }
+
+    int countNodes(Node *node)
+    {
+        if (node == nullptr)
+            return 0;
+        else
+        {
+            int count = 1;
+            count += countNodes(node->left);
+            count += countNodes(node->right);
+            return count;
+        }
     }
 
 public:
@@ -135,6 +139,11 @@ public:
     void insert(int data)
     {
         insert(data, root);
+    }
+
+    int countNodes()
+    {
+        return countNodes(root) + 1;
     }
 
     void printInorder()
